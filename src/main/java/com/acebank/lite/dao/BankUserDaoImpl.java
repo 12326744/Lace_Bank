@@ -1,11 +1,11 @@
-package com.lacebank.dao;
+package com.acebank.lite.dao;
 
-import com.lacebank.models.AccountRecoveryDTO;
-import com.lacebank.models.LoginResult;
-import com.lacebank.models.Transaction;
-import com.lacebank.models.User;
-import com.lacebank.util.ConnectionManager;
-import com.lacebank.util.QueryLoader;
+import com.acebank.lite.models.AccountRecoveryDTO;
+import com.acebank.lite.models.LoginResult;
+import com.acebank.lite.models.Transaction;
+import com.acebank.lite.models.User;
+import com.acebank.lite.util.ConnectionManager;
+import com.acebank.lite.util.QueryLoader;
 
 import java.sql.*;
 import java.util.Optional;
@@ -14,10 +14,8 @@ import java.util.Optional;
 import lombok.extern.java.Log;
 
 import java.math.BigDecimal;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Log
 public class BankUserDaoImpl implements BankUserDao {
@@ -167,40 +165,49 @@ public class BankUserDaoImpl implements BankUserDao {
 
     @Override
     public boolean transfer(int fromAcc, int toAcc, BigDecimal amount) throws SQLException {
-        Connection conn = getConnection();
-        try {
-            conn.setAutoCommit(false); // TRANSACTION START
+        // Use try-with-resources for the connection to ensure it always closes
+        try (Connection conn = getConnection()) {
+            try {
+                conn.setAutoCommit(false); // TRANSACTION START
 
-            // 1. Debit from Sender
-            try (PreparedStatement ps1 = conn.prepareStatement(QueryLoader.get("acc.debit"))) {
-                ps1.setBigDecimal(1, amount);
-                ps1.setInt(2, fromAcc);
-                ps1.executeUpdate();
+                // 1. Debit from Sender (Using 'account.withdraw' from your YAML)
+                try (PreparedStatement ps1 = conn.prepareStatement(QueryLoader.get("account.withdraw"))) {
+                    ps1.setBigDecimal(1, amount);
+                    ps1.setInt(2, fromAcc);
+                    ps1.setBigDecimal(3, amount); // The third '?' is for BALANCE >= ?
+                    int rowsAffected = ps1.executeUpdate();
+
+                    // If 0 rows affected, it means insufficient balance!
+                    if (rowsAffected == 0) {
+                        conn.rollback();
+                        return false;
+                    }
+                }
+
+                // 2. Credit to Recipient (Using 'account.deposit' from your YAML)
+                try (PreparedStatement ps2 = conn.prepareStatement(QueryLoader.get("account.deposit"))) {
+                    ps2.setBigDecimal(1, amount);
+                    ps2.setInt(2, toAcc);
+                    ps2.executeUpdate();
+                }
+
+                // 3. Log the Transaction (Using 'transaction.log' from your YAML)
+                try (PreparedStatement ps3 = conn.prepareStatement(QueryLoader.get("transaction.log"))) {
+                    ps3.setInt(1, fromAcc);
+                    ps3.setInt(2, toAcc);
+                    ps3.setBigDecimal(3, amount);
+                    ps3.setString(4, "TRANSFER");
+                    ps3.setString(5, "Transfer to " + toAcc); // Added missing 5th parameter for REMARK
+                    ps3.executeUpdate();
+                }
+
+                conn.commit(); // TRANSACTION SUCCESS
+                return true;
+            } catch (SQLException e) {
+                conn.rollback(); // TRANSACTION REVERT
+                log.severe("Transfer failed: " + e.getMessage());
+                throw e;
             }
-
-            // 2. Credit to Recipient
-            try (PreparedStatement ps2 = conn.prepareStatement(QueryLoader.get("acc.credit"))) {
-                ps2.setBigDecimal(1, amount);
-                ps2.setInt(2, toAcc);
-                ps2.executeUpdate();
-            }
-
-            // 3. Log the Transaction for BOTH users (optional: two logs)
-            try (PreparedStatement ps3 = conn.prepareStatement(QueryLoader.get("txn.log"))) {
-                ps3.setInt(1, fromAcc);
-                ps3.setInt(2, toAcc);
-                ps3.setBigDecimal(3, amount);
-                ps3.setString(4, "TRANSFER");
-                ps3.executeUpdate();
-            }
-
-            conn.commit(); // TRANSACTION SUCCESS
-            return true;
-        } catch (SQLException e) {
-            conn.rollback(); // TRANSACTION REVERT (Money stays safe)
-            throw e;
-        } finally {
-            conn.close();
         }
     }
 

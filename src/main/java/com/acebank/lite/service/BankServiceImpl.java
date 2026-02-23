@@ -1,12 +1,13 @@
-package com.lacebank.service;
+package com.acebank.lite.service;
 
 
-import com.lacebank.dao.BankUserDao;
-import com.lacebank.dao.BankUserDaoImpl;
+import com.acebank.lite.dao.BankUserDao;
+import com.acebank.lite.dao.BankUserDaoImpl;
 
-import com.lacebank.models.*;
-import com.lacebank.util.MailUtil;
-import com.lacebank.util.PasswordUtil;
+import com.acebank.lite.models.*;
+import com.acebank.lite.models.*;
+import com.acebank.lite.util.MailUtil;
+import com.acebank.lite.util.PasswordUtil;
 import lombok.extern.java.Log;
 
 import java.math.BigDecimal;
@@ -115,7 +116,7 @@ public class BankServiceImpl implements BankService {
 
             if (isSaved) {
                 // 3. Send Welcome Email (Asynchronous is better, but this works for now)
-//                sendWelcomeEmail(user, accountNumber);
+                sendWelcomeEmail(user, accountNumber);
 
                 // 4. Return the details to be used for the session
                 return Optional.of(new LoginResult(

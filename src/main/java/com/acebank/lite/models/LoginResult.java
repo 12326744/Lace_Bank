@@ -1,4 +1,4 @@
-package com.lacebank.models;
+package com.acebank.lite.models;
 
 import java.math.BigDecimal;
 

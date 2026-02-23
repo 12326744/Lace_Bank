@@ -1,4 +1,4 @@
-package com.lacebank.util;
+package com.acebank.lite.util;
 
 import java.io.IOException;
 import java.io.InputStream;

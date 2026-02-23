@@ -1,4 +1,4 @@
-package com.lacebank.util;
+package com.acebank.lite.util;
 
 public class ConfigKeys {
 
@@ -14,7 +14,7 @@ public class ConfigKeys {
     public static final String MAIL_SMTP_PORT = "mail.smtp.port";
     public static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
     public static final String MAIL_SMTP_STARTTLS = "mail.smtp.starttls.enable";
-    public static final String MAIL_SMTP_CONN_TIMEOUT = "mail.smtp.connectiontimeout";
+    public static final String MAIL_SMTP_CONN_TIMEOUT = "mail.smtp.connection-timeout";
     public static final String MAIL_SMTP_TIMEOUT = "mail.smtp.timeout";
 
     // Database Keys

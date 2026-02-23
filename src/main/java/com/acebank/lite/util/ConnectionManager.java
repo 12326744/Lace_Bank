@@ -1,7 +1,6 @@
-package com.lacebank.util;
+package com.acebank.lite.util;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
-import lombok.extern.java.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.Serial;
 
 @Log
-@WebServlet("/AppExceptionHandler")
-public class AppExceptionHandler extends HttpServlet {
+@WebServlet("/error-handler")
+public class ErrorHandler extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
 

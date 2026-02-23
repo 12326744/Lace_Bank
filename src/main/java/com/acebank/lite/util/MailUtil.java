@@ -1,4 +1,4 @@
-package com.lacebank.util;
+package com.acebank.lite.util;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;

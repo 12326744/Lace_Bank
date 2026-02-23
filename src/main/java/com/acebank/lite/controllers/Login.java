@@ -1,18 +1,17 @@
-package com.lacebank.controllers;
+package com.acebank.lite.controllers;
 
 import java.io.IOException;
 import java.io.Serial;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 
-import com.lacebank.dao.BankUserDao;
-import com.lacebank.dao.BankUserDaoImpl;
-import com.lacebank.models.LoginResult;
-import com.lacebank.models.Transaction;
-import com.lacebank.service.BankService;
-import com.lacebank.service.BankServiceImpl;
+import com.acebank.lite.dao.BankUserDao;
+import com.acebank.lite.dao.BankUserDaoImpl;
+import com.acebank.lite.models.LoginResult;
+import com.acebank.lite.models.Transaction;
+import com.acebank.lite.service.BankService;
+import com.acebank.lite.service.BankServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -25,7 +24,6 @@ public class Login extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    // FIX: Initialize the Service Layer
     private final BankService bankService = new BankServiceImpl();
     private final BankUserDao userDao = new BankUserDaoImpl();
 
@@ -60,19 +58,13 @@ public class Login extends HttpServlet {
                 session.setAttribute("transactionDetailsList", statement);
 
                 // 4. Handle "Remember Me" Cookie
-//                Cookie userCookie = new Cookie("rememberedAccount", accStr);
-//                userCookie.setHttpOnly(true); // Security: Prevents JS access
-//
-//                if ("on".equals(rememberMe)) {
-//                    userCookie.setMaxAge(60 * 60 * 24 * 30); // 30 Days
-//                } else {
-//                    userCookie.setMaxAge(0); // Delete cookie if not checked
-//                }
-//                response.addCookie(userCookie);
+
 
                 log.info("User " + accountNo + " logged in successfully.");
+
 //                request.getRequestDispatcher("/WEB-INF/views/Home.jsp").forward(request, response);
 
+                // PRG Pattern
                 // REDIRECT: Tells browser "Go to /home using GET"
                 response.sendRedirect(request.getContextPath() + "/home");
             } else {
@@ -80,7 +72,7 @@ public class Login extends HttpServlet {
                 response.sendRedirect("LoginFail.jsp");
             }
         } catch (Exception e) {
-            log.severe("Login Error: " + e.getMessage());
+            log.severe("Login Error: \n" + e.getMessage());
             response.sendRedirect("LoginFail.jsp");
         }
     }

@@ -1,10 +1,10 @@
-package com.lacebank.controllers;
+package com.acebank.lite.controllers;
 
 
-import com.lacebank.models.LoginResult;
-import com.lacebank.models.User;
-import com.lacebank.service.BankService;
-import com.lacebank.service.BankServiceImpl;
+import com.acebank.lite.models.LoginResult;
+import com.acebank.lite.models.User;
+import com.acebank.lite.service.BankService;
+import com.acebank.lite.service.BankServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,12 +14,14 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.java.Log;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Optional;
 
 @Log
 @WebServlet("/signup")
 public class SignUp extends HttpServlet {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // Use the service, not the DAO directly
