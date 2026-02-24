@@ -9,6 +9,7 @@ import com.acebank.lite.models.User;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,4 +33,6 @@ public interface BankService {
     public boolean recoverAccount(String email);
 
     public boolean applyForLoan(String firstName, String email, String loanType);
+
+    List<Transaction> getTransactionsBetween(int accountNo, LocalDateTime start, LocalDateTime end);
 }

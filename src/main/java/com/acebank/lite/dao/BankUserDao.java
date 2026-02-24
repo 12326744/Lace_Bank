@@ -4,6 +4,7 @@ import com.acebank.lite.models.*;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,4 +35,7 @@ public interface BankUserDao {
     boolean accountExists(int accountNo) throws SQLException;
 
     BigDecimal getBalance(int accountNo) throws SQLException;
+
+    List<Transaction> getTransactionsBetween(int accountNo, LocalDateTime start, LocalDateTime end);
+
 }

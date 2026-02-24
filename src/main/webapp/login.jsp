@@ -19,20 +19,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | AceBank</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/auth.css">
+
 </head>
 
-<body>
+<body class="${cookie.theme_pref.value}">
 <div class="auth-wrapper fade-in-up">
 
     <header>
-        <div >
-            <h1>Ace<span>Bank</span></h1>
+        <div class="logo">
+            <h1 class="logo-text">Ace<span>Bank</span></h1>
         </div>
 
         <div class="header-actions">
 
+
+            <%--            <input type="checkbox" id="nav-toggle" class="nav-toggle">--%>
+            <%--            <label for="nav-toggle" class="nav-toggle-label">--%>
+            <%--                <i class="ri-menu-5-line"></i>--%>
+            <%--            </label>--%>
+
             <nav>
                 <ul>
+                    <div class="theme-switch-wrapper">
+                        <label class="theme-switch" for="theme-checkbox">
+                            <input type="checkbox" id="theme-checkbox"/>
+                            <div class="slider round">
+                                <i class="ri-sun-line"></i>
+                                <i class="ri-moon-line"></i>
+                            </div>
+                        </label>
+                    </div>
                     <li><a href="index.jsp">Home</a></li>
                     <li><a href="sign-up.jsp">Join Now</a></li>
                 </ul>
@@ -54,28 +74,31 @@
                        placeholder="Enter Account Number">
             </div>
 
-            <div>
+            <div class="form-control">
                 <label for="pass">Password</label>
                 <input type="password" id="pass" name="password"
                        required placeholder="••••••••">
             </div>
-            <div>
-                <input type="checkbox" name="rememberMe" id="remember"
-                ${not empty savedAccount ? 'checked' : ''}>
-                <label for="remember">Remember Me</label>
+
+            <div class="form-options">
+                <div class="remember-me">
+                    <input type="checkbox" name="rememberMe" id="remember"
+                    ${not empty savedAccount ? 'checked' : ''}>
+                    <label for="remember">Remember Me</label>
+                </div>
+                <a href="ForgotPassword.jsp" class="forgot-link">Forgot Password?</a>
             </div>
-            <a href="ForgotPassword.jsp">Forgot Password?</a>
+
+            <button type="submit" class="btn-primary full-width">Login to Account</button>
+        </form>
+
+        <p class="auth-footer">
+            New to Ace Bank? <a href="sign-up.jsp">Create an account</a>
+        </p>
+    </main>
 </div>
 
-<button type="submit">Login to Account</button>
-</form>
-
-<p>
-    New to Ace Bank? <a href="sign-up.jsp">Create an account</a>
-</p>
-</main>
-</div>
-
+<script src="${pageContext.request.contextPath}/assets/js/dark-mode.js"></script>
 
 </body>
 </html>

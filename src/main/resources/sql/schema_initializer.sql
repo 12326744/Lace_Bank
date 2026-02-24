@@ -1,5 +1,5 @@
--- CREATE DATABASE IF NOT EXISTS acebank;
--- USE acebank;
+-- CREATE DATABASE IF NOT EXISTS acebank_lite;
+-- USE acebank_lite;
 
 -- Tables (IF NOT EXISTS)
 CREATE TABLE IF NOT EXISTS USERS (

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Log
-@WebServlet("/signup")
+@WebServlet("/sign-up")
 public class SignUp extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;

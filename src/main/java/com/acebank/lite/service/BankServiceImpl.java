@@ -13,6 +13,7 @@ import lombok.extern.java.Log;
 import java.math.BigDecimal;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -263,6 +264,13 @@ public class BankServiceImpl implements BankService {
             log.severe("Failed to send loan confirmation email: " + e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<Transaction> getTransactionsBetween(int accountNo,
+                                                    LocalDateTime start,
+                                                    LocalDateTime end) {
+        return userDao.getTransactionsBetween(accountNo, start, end);
     }
 
 

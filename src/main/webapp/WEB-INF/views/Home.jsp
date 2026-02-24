@@ -84,8 +84,17 @@
     <section>
         <div>
             <h3>Recent Transactions</h3>
-            <button class="btn-secondary">Download CSV
-            </button>
+           <form action="${pageContext.request.contextPath}/download-statement" method="get">
+               <label>From:</label>
+               <input type="date" name="fromDate" required />
+
+               <label>To:</label>
+               <input type="date" name="toDate" required />
+
+               <button type="submit" class="btn-secondary">
+                   Download CSV
+               </button>
+           </form>
         </div>
         <table>
             <thead>

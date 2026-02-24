@@ -8,6 +8,7 @@ import com.acebank.lite.util.ConnectionManager;
 import com.acebank.lite.util.QueryLoader;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -321,6 +322,11 @@ public class BankUserDaoImpl implements BankUserDao {
             }
         }
         return BigDecimal.ZERO;
+    }
+
+    @Override
+    public List<Transaction> getTransactionsBetween(int accountNo, LocalDateTime start, LocalDateTime end) {
+        return List.of();
     }
 
 
