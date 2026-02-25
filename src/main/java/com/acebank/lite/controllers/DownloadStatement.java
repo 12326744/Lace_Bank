@@ -30,7 +30,6 @@ public class DownloadStatement extends HttpServlet {
 
         int accountNo = Integer.parseInt(accObj.toString());
 
-        // Get date parameters
         String fromParam = req.getParameter("fromDate");
         String toParam = req.getParameter("toDate");
 
@@ -44,30 +43,26 @@ public class DownloadStatement extends HttpServlet {
         LocalDate toDate = LocalDate.parse(toParam);
 
         LocalDateTime start = fromDate.atStartOfDay();
-        LocalDateTime end = toDate.atTime(23, 59, 59);
+        LocalDateTime end = toDate.atTime(23, 59, 59, 999999999); // full day fix
 
-        // Validate date range
         if (start.isAfter(end)) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "Invalid date range");
             return;
         }
 
-        //  Fetch filtered transactions
+        // ✅ FIXED LINE
         List<Transaction> transactions =
                 bankService.getTransactionsBetween(accountNo, start, end);
 
-        // Tell browser this is downloadable CSV
         resp.setContentType("text/csv");
         resp.setHeader("Content-Disposition",
                 "attachment; filename=statement.csv");
 
         PrintWriter writer = resp.getWriter();
 
-        // CSV Header
         writer.println("Date,Type,Reference,Amount");
 
-        // CSV Rows
         for (Transaction tx : transactions) {
             writer.printf("%s,%s,%s,%s%n",
                     tx.createdAt(),

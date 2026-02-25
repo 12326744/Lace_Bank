@@ -326,9 +326,45 @@ public class BankUserDaoImpl implements BankUserDao {
     }
 
     @Override
-    public List<Transaction> getTransactionsBetween(int accountNo, LocalDateTime start, LocalDateTime end) {
-        return List.of();
+    public List<Transaction> getTransactionsBetween(int accountNo,
+                                                    LocalDateTime start,
+                                                    LocalDateTime end) {
+
+        List<Transaction> txList = new ArrayList<>();
+
+        String sql = """
+            SELECT * FROM TRANSACTIONS
+            WHERE (SENDER_ACCOUNT = ? OR RECEIVER_ACCOUNT = ?)
+            AND CREATED_AT BETWEEN ? AND ?
+            ORDER BY CREATED_AT DESC
+            """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, accountNo);
+            pstmt.setInt(2, accountNo);
+            pstmt.setTimestamp(3, Timestamp.valueOf(start));
+            pstmt.setTimestamp(4, Timestamp.valueOf(end));
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                txList.add(new Transaction(
+                        rs.getInt("ID"),
+                        rs.getInt("SENDER_ACCOUNT"),
+                        rs.getInt("RECEIVER_ACCOUNT"),
+                        rs.getBigDecimal("AMOUNT"),
+                        rs.getString("TX_TYPE"),
+                        rs.getString("REMARK"),
+                        rs.getTimestamp("CREATED_AT").toLocalDateTime()
+                ));
+            }
+
+        } catch (SQLException e) {
+            log.severe("Error fetching filtered transactions: " + e.getMessage());
+        }
+
+        return txList;
     }
-
-
 }
