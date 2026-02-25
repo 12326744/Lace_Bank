@@ -30,7 +30,7 @@ public class DownloadStatement extends HttpServlet {
 
         int accountNo = Integer.parseInt(accObj.toString());
 
-        // 🔥 Get date parameters
+        // Get date parameters
         String fromParam = req.getParameter("fromDate");
         String toParam = req.getParameter("toDate");
 
@@ -46,14 +46,14 @@ public class DownloadStatement extends HttpServlet {
         LocalDateTime start = fromDate.atStartOfDay();
         LocalDateTime end = toDate.atTime(23, 59, 59);
 
-        // 🔥 Validate date range
+        // Validate date range
         if (start.isAfter(end)) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "Invalid date range");
             return;
         }
 
-        // 🔥 Fetch filtered transactions
+        //  Fetch filtered transactions
         List<Transaction> transactions =
                 bankService.getTransactionsBetween(accountNo, start, end);
 

@@ -44,7 +44,7 @@
     <main class="hero">
         <section class="hero-text fade-in-up">
             <span class="badge">Trusted by 2M+ Users</span>
-            <h1>Banking Made <span class="highlight">Easy</span></h1>
+            <h1>Bank Smarter <span class="highlight">Live Better</span></h1>
             <p>Join over 40,000 people who open an Ace Bank account every week. Manage, spend, and save your money with
                 ease.</p>
 
@@ -55,7 +55,8 @@
         </section>
 
         <figure class="hero-image float-img">
-            <img src="${pageContext.request.contextPath}/assets/images/bank_hero.svg" alt="Ace Bank Illustration">
+            <img src="${pageContext.request.contextPath}/assets/images/undraw_device-sync_d9ei.svg"
+            alt="Ace Bank Illustration">
         </figure>
     </main>
 </div>

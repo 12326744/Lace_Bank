@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class BankServiceImpl implements BankService {
 
     private final BankUserDao userDao = new BankUserDaoImpl(); // Or get via Singleton
-    private static final BigDecimal DAILY_LIMIT = new BigDecimal("500.00");
+    private static final BigDecimal DAILY_LIMIT = new BigDecimal("50000.00");
 
 
     @Override
