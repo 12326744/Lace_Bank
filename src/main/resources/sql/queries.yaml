@@ -7,8 +7,10 @@ user:
 
   signup: "INSERT INTO USERS (FIRST_NAME, LAST_NAME, AADHAAR_NO, EMAIL, PASSWORD_HASH) VALUES (?,?,?,?,?)"
 
-  recover_details: >
-    SELECT u.FIRST_NAME, u.LAST_NAME, a.ACCOUNT_NO
+  recover_details: |
+    SELECT u.FIRST_NAME,
+           u.LAST_NAME,
+           a.ACCOUNT_NO
     FROM USERS u
     JOIN ACCOUNTS a ON u.USER_ID = a.USER_ID
     WHERE u.EMAIL = ?

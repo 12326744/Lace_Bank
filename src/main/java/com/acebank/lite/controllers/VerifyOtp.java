@@ -7,13 +7,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.java.Log;
 
 import java.io.IOException;
 
-@Log
-@WebServlet(name = "Forgot", urlPatterns = "/Forgot")
-public class Forgot extends HttpServlet {
+@WebServlet(name = "VerifyOtp", urlPatterns = "/VerifyOtp")
+public class VerifyOtp extends HttpServlet {
 
     private final BankService bankService = new BankServiceImpl();
 
@@ -22,25 +20,21 @@ public class Forgot extends HttpServlet {
             throws ServletException, IOException {
 
         String email = request.getParameter("email");
+        String otp = request.getParameter("otp");
 
         try {
 
-            boolean sent = bankService.initiatePasswordReset(email);
+            boolean valid = bankService.verifyOtp(email, otp);
 
-            if (sent) {
-                log.info("OTP sent to: " + email);
-
-                request.setAttribute("email", email);
-                request.getRequestDispatcher("verify-otp.jsp")
-                        .forward(request, response);
+            if (valid) {
+                request.getSession().setAttribute("resetEmail", email);
+                response.sendRedirect("ResetPassword.jsp");
             } else {
-                log.warning("Email not found: " + email);
-                response.sendRedirect("ForgotFail.jsp");
+                response.sendRedirect("OtpInvalid.jsp");
             }
 
         } catch (Exception e) {
-            log.severe("Error in Forgot servlet: " + e.getMessage());
-            response.sendRedirect("ForgotFail.jsp");
+            response.sendRedirect("OtpInvalid.jsp");
         }
     }
 }
