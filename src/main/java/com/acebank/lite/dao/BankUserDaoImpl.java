@@ -260,26 +260,6 @@ public class BankUserDaoImpl implements BankUserDao {
     }
 
     @Override
-    public boolean changePassword(int accountNo, String storedHash, String oldPw) throws SQLException {
-        try (Connection conn = getConnection()) {
-            int userId = -1;
-            PreparedStatement ps1 = conn.prepareStatement(QueryLoader.get("user.check_password_by_acc"));
-            ps1.setInt(1, accountNo);
-            ResultSet rs = ps1.executeQuery();
-            if (rs.next() && rs.getString("PASSWORD_HASH").equals(oldPw)) {
-                userId = rs.getInt("USER_ID");
-                PreparedStatement ps2 = conn.prepareStatement(QueryLoader.get("user.update_password"));
-                String newPw = "";
-                ps2.setString(1, newPw);
-                ps2.setInt(2, userId);
-                return ps2.executeUpdate() > 0;
-            }
-            return false;
-        }
-    }
-
-
-    @Override
     public Optional<AccountRecoveryDTO> getRecoveryDetails(String email) throws SQLException {
         String sql = QueryLoader.get("user.recover_details");
         try (Connection conn = getConnection();
@@ -366,5 +346,93 @@ public class BankUserDaoImpl implements BankUserDao {
         }
 
         return txList;
+    }
+
+    @Override
+    public boolean saveOtp(String email, String otp, LocalDateTime expiry) throws SQLException {
+        String sql = QueryLoader.get("otp.save");
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setString(2, otp);
+            ps.setTimestamp(3, Timestamp.valueOf(expiry));
+            ps.setBoolean(4, false);
+
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    @Override
+    public Optional<Integer> verifyOtp(String email, String otp) throws SQLException {
+        String sql = QueryLoader.get("otp.verify");
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setString(2, otp);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(rs.getInt("ID"));
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean markOtpUsed(int otpId) throws SQLException {
+        String sql = QueryLoader.get("otp.mark_used");
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, otpId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    @Override
+    public boolean updatePasswordByEmail(String email, String hashedPassword) throws SQLException {
+
+        String sql = "UPDATE USERS SET PASSWORD_HASH = ? WHERE EMAIL = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, hashedPassword);
+            ps.setString(2, email);
+
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+
+
+    @Override
+    public boolean updatePassword(int accountNo, String newHashedPassword) throws SQLException {
+
+        String sql = """
+        UPDATE USERS u
+        JOIN ACCOUNTS a ON u.USER_ID = a.USER_ID
+        SET u.PASSWORD_HASH = ?
+        WHERE a.ACCOUNT_NO = ?
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, newHashedPassword);
+            ps.setInt(2, accountNo);
+
+            int rows = ps.executeUpdate();
+
+            System.out.println("Rows updated: " + rows); // DEBUG
+
+            return rows > 0;
+        }
     }
 }

@@ -28,7 +28,8 @@ public interface BankUserDao {
 
     List<Transaction> getStatement(int accountNo) throws SQLException;
 
-    boolean changePassword(int accountNo, String storedHash, String oldPw) throws SQLException;
+    // ✅ FIXED METHOD
+    boolean updatePassword(int accountNo, String newHashedPassword) throws SQLException;
 
     Optional<AccountRecoveryDTO> getRecoveryDetails(String email) throws SQLException;
 
@@ -37,5 +38,14 @@ public interface BankUserDao {
     BigDecimal getBalance(int accountNo) throws SQLException;
 
     List<Transaction> getTransactionsBetween(int accountNo, LocalDateTime start, LocalDateTime end);
+
+    boolean saveOtp(String email, String otp, LocalDateTime expiry) throws SQLException;
+
+    Optional<Integer> verifyOtp(String email, String otp) throws SQLException;
+
+    boolean markOtpUsed(int otpId) throws SQLException;
+
+    boolean updatePasswordByEmail(String email, String hashedPassword) throws SQLException;
+
 
 }

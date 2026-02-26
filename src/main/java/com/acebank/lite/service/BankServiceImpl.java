@@ -45,15 +45,21 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public boolean changePassword(int accountNo, String oldPlain, String newPlain) throws SQLException {
+
         String storedHash = userDao.getPasswordHash(accountNo);
 
-        if (PasswordUtil.checkPassword(oldPlain, storedHash)) {
-            String newSecureHash = PasswordUtil.hashPassword(newPlain);
-            return userDao.changePassword(accountNo, storedHash, newSecureHash);
+        if (storedHash == null) {
+            return false;
         }
-        return false;
-    }
 
+        if (!PasswordUtil.checkPassword(oldPlain, storedHash)) {
+            return false;
+        }
+
+        String newSecureHash = PasswordUtil.hashPassword(newPlain);
+
+        return userDao.updatePassword(accountNo, newSecureHash);
+    }
 
     @Override
     public boolean processDeposit(int accountNo, BigDecimal amount) {
@@ -271,6 +277,64 @@ public class BankServiceImpl implements BankService {
                                                     LocalDateTime start,
                                                     LocalDateTime end) {
         return userDao.getTransactionsBetween(accountNo, start, end);
+    }
+
+    @Override
+    public boolean initiatePasswordReset(String email) throws SQLException {
+
+        // Check if email exists
+        Optional<AccountRecoveryDTO> userOpt = userDao.getRecoveryDetails(email);
+
+        if (userOpt.isEmpty()) {
+            return false; // Email not found
+        }
+
+        // Generate 6-digit OTP
+        String otp = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 999999));
+
+        // Expiry time (5 minutes from now)
+        LocalDateTime expiry = LocalDateTime.now().plusMinutes(5);
+
+        // Save OTP in DB
+        boolean saved = userDao.saveOtp(email, otp, expiry);
+
+        if (saved) {
+            // Send OTP via Email
+            String subject = "AceBank Password Reset OTP";
+            String body = "Your OTP for password reset is: " + otp +
+                    "\n\nThis OTP will expire in 5 minutes.";
+
+            try {
+                MailUtil.sendMail(email, subject, body);
+            } catch (Exception e) {
+                log.warning("OTP email failed to send.");
+            }
+        }
+
+        return saved;
+    }
+
+    @Override
+    public boolean verifyOtp(String email, String otp) throws SQLException {
+
+        Optional<Integer> otpId = userDao.verifyOtp(email, otp);
+
+        if (otpId.isPresent()) {
+            // Mark OTP as used
+            userDao.markOtpUsed(otpId.get());
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean resetPassword(String email, String newPassword) throws SQLException {
+
+        // Hash new password
+        String secureHash = PasswordUtil.hashPassword(newPassword);
+
+        return userDao.updatePasswordByEmail(email, secureHash);
     }
 
 

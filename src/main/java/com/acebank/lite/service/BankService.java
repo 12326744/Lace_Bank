@@ -35,4 +35,10 @@ public interface BankService {
     public boolean applyForLoan(String firstName, String email, String loanType);
 
     List<Transaction> getTransactionsBetween(int accountNo, LocalDateTime start, LocalDateTime end);
+
+    boolean initiatePasswordReset(String email) throws SQLException;
+
+    boolean verifyOtp(String email, String otp) throws SQLException;
+
+    boolean resetPassword(String email, String newPassword) throws SQLException;
 }
