@@ -52,14 +52,37 @@ header {
     z-index: 1000;
 }
 
+/* Logo Text */
 .logo-text {
     font-size: 1.6rem;
     font-weight: 800;
     letter-spacing: -1px;
+    cursor: default;
+    display: inline-flex;
+}
+
+/* Initial Colors */
+.logo-text {
+    color: #ffffff; /* Ace is white initially */
 }
 
 .logo-text span {
-    color: var(--primary);
+    color: var(--primary); /* Bank is blue initially */
+    transition: color 0.3s ease;
+}
+
+/* Hover Ace part (text node before span) */
+.logo-text:hover {
+    color: blue; /* Ace turns blue when hovering the whole logo */
+}
+
+.logo-text:hover span {
+    color: white; /* Bank turns white when hovering the whole logo */
+}
+
+/* Optional: make individual hover more precise with pointer events */
+.logo-text span:hover {
+    color: #ffffff; /* Bank turns white when hovered directly */
 }
 
 nav ul {
@@ -95,13 +118,41 @@ nav a:not(.btn-primary):hover {
 }
 
 .badge {
+    position: relative;
     background: rgba(37, 99, 235, 0.1);
     color: var(--primary);
     padding: 0.6rem 1.2rem;
     border-radius: 50px;
+    border: 1px solid green;
     font-size: 0.85rem;
     font-weight: 800;
     text-transform: uppercase;
+    overflow: hidden;
+    transition: color 0.4s ease;
+}
+
+/* Sliding background */
+.badge::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: green;
+    border-radius: 50px;
+    z-index: -1;
+    transition: width 0.4s ease;
+}
+
+/* Hover effect */
+.badge:hover::before {
+    width: 100%;
+}
+
+/* Text color change */
+.badge:hover {
+    color: white;
 }
 
 .hero-text h1 {
@@ -128,17 +179,104 @@ nav a:not(.btn-primary):hover {
     align-items: center;
 }
 
+
+/* Target the heading */
+h1 {
+    color: #ffffff; /* Bank Smarter = white initially */
+    transition: color 0.3s ease;
+}
+
+/* Highlight text */
+h1 .highlight {
+    color: var(--primary); /* Live Better = blue initially */
+    transition: color 0.3s ease;
+}
+
+/* Hover Bank Smarter (the text node before the span) */
+h1:hover {
+    color: var(--primary); /* Bank Smarter becomes blue on hover */
+}
+
+h1:hover .highlight {
+    color: #ffffff; /* Live Better becomes white when hovering the heading */
+}
+
+/* Hover specifically on Live Better */
+h1 .highlight:hover {
+    color: #ffffff; /* Live Better stays white */
+}
+
+h1 .highlight:hover::before {
+    /* ensure main text color swap */
+    /* trick: use sibling selector of highlight via h1 */
+}
+
+h1 .highlight:hover {
+    color: #ffffff;
+}
+
+h1 .highlight:hover {
+    /* swap the first text node color (Bank Smarter) */
+    color: #ffffff;
+}
+
+/* More reliable version for modern browsers */
+h1:hover .highlight {
+    color: #ffffff;
+}
+
+h1:hover::first-letter {
+    /* optional small animation if needed */
+}
+
+
+
+
+/* Paragraph styling */
+p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #ffffff; /* fallback for dark mode */
+    cursor: pointer;
+    display: inline; /* important to prevent extra box */
+    transition: all 0.3s ease;
+    background: none; /* remove background by default */
+}
+
+/* Hover gradient effect */
+p:hover {
+    background: linear-gradient(90deg, #2563eb, #4f46e5, #2563eb);
+    background-size: 200% 100%;
+    -webkit-background-clip: text; /* only text shows gradient */
+    -webkit-text-fill-color: transparent;
+    animation: gradient-move 1.5s linear infinite;
+}
+
+/* Keyframes for smooth sliding gradient */
+@keyframes gradient-move {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+
+
+
+
 /* --- 5. Buttons & Interactions --- */
 .btn-primary {
     background: var(--primary);
     color: #fff !important;
     padding: 1rem 2rem;
     border-radius: 12px;
+    border:2px solid wheat;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .btn-primary:hover {
-    transform: translateY(-4px);
     box-shadow: 0 15px 30px rgba(37, 99, 235, 0.3);
     background: var(--primary-hover);
 }
@@ -173,13 +311,19 @@ nav a:not(.btn-primary):hover {
     animation: fadeInUp 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
-/* Updated selector to target the image inside the figure */
 .float-img img {
     width: 100%;
     height: auto;
     filter: drop-shadow(0 30px 60px rgba(0,0,0,0.12));
-    animation: floating 5s ease-in-out infinite;
-    display: block; /* Prevents tiny alignment gaps */
+    display: block;
+
+    /* Smooth transition for transform */
+    transition: transform 2.5s ease;
+}
+
+/* Hover: shrink more */
+.float-img img:hover {
+    transform: scale(0.3); /* shrink to 80% of original size */
 }
 
 /* --- Theme Toggle Switch Styling --- */

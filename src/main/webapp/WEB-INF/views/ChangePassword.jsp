@@ -194,10 +194,6 @@
 <body>
 <header>
     <h1 class="logo-text">Ace<span class="bank">Bank</span></h1>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle">
-    <label for="nav-toggle" class="nav-toggle-label">
-        <img src="${pageContext.request.contextPath}/images/menu-24px.svg" alt="Menu">
-    </label>
     <nav>
         <ul>
             <li><a href="${pageContext.request.contextPath}/Home.jsp">Dashboard</a></li>

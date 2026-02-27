@@ -5,11 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ace Bank</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css">
-
-    <%--    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/index.css">--%>
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/images/img_1.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 </head>
 
@@ -43,10 +39,10 @@
 
     <main class="hero">
         <section class="hero-text fade-in-up">
-            <span class="badge">Trusted by 2M+ Users</span>
+            <span class="badge">🔏Next-Gen Banking Platform</span>
             <h1>Bank Smarter <span class="highlight">Live Better</span></h1>
-            <p>Join over 40,000 people who open an Ace Bank account every week. Manage, spend, and save your money with
-                ease.</p>
+            <p>Take control of your finances with AceBank.A smarter, faster, and more secure way to manage your
+            money. Everything you need, all in one powerful platform.</p>
 
             <div class="hero-btns">
                 <a href="${pageContext.request.contextPath}/sign-up.jsp" class="btn-primary">Open Account</a>
