@@ -28,7 +28,6 @@ public interface BankUserDao {
 
     List<Transaction> getStatement(int accountNo) throws SQLException;
 
-    // ✅ FIXED METHOD
     boolean updatePassword(int accountNo, String newHashedPassword) throws SQLException;
 
     Optional<AccountRecoveryDTO> getRecoveryDetails(String email) throws SQLException;

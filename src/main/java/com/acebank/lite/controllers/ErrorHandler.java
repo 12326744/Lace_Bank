@@ -66,9 +66,7 @@ public class ErrorHandler extends HttpServlet {
         request.setAttribute("errorMessage", message);
         request.setAttribute("errorCode", statusCode);
 
-        // Forward to the error page
-        // Note: Use "/error.jsp" if it's in the webapp root,
-        // or "/WEB-INF/views/error.jsp" if it's hidden there.
+
         request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
 }

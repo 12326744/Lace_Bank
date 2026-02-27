@@ -33,7 +33,6 @@ public class Home extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        // Security Check
         if (session == null || session.getAttribute("accountNumber") == null) {
             log.warning("Unauthorized access attempt to /home");
             response.sendRedirect("login.jsp");
@@ -43,10 +42,7 @@ public class Home extends HttpServlet {
         int accountNumber = (int) session.getAttribute("accountNumber");
 
         try {
-            // Always refresh data before painting the UI
             updateSessionData(session, accountNumber);
-
-            // Forward to the hidden JSP in WEB-INF
             request.getRequestDispatcher("/WEB-INF/views/Home.jsp").forward(request, response);
 
         } catch (Exception e) {
@@ -77,7 +73,7 @@ public class Home extends HttpServlet {
         String toAmountStr = request.getParameter("toAmount");
         String withdrawAmount = request.getParameter("withdraw");
 
-        String redirectUrl = "home"; // Default redirect back to dashboard
+        String redirectUrl = "home";
 
         try {
             // --- ACTION 1: DEPOSIT ---

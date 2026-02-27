@@ -23,7 +23,6 @@ public class Loan extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        // Safety Check: Is user logged in?
         if (session == null || session.getAttribute("email") == null) {
             response.sendRedirect("Login.jsp");
             return;
@@ -49,7 +48,6 @@ public class Loan extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        // Redirect direct URL access back to the options page
         response.sendRedirect("LoanOptions.jsp");
     }
 }
